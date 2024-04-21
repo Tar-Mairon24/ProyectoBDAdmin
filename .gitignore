@@ -54,4 +54,9 @@ compile_commands.json
 *_qmlcache.qrc
 
 #Ignore venv repositorie
-/venv
+/.venv/
+
+#Ignore pycache
+/app/__pycache__
+/ui/__pycache__
+*.pyc
