@@ -23,6 +23,7 @@ class Ui_Login(object):
         if not Login.objectName():
             Login.setObjectName(u"Login")
         Login.resize(400, 500)
+        Login.setFixedSize(400, 500)
         font = QFont()
         font.setPointSize(12)
         Login.setFont(font)
