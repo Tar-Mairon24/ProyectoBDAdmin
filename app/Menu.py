@@ -2,9 +2,11 @@ import sys
 from PySide6.QtGui import QAction
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget
 from gui.ui_menu import Ui_Menu
+from app.Login import Login
+
 
 class Menu(QWidget):
-    def __init__(self, parent=None):
+    def __init__(self, parent=Login()):
         super(Menu,self).__init__(parent)
         self.ui = Ui_Menu()
         self.ui.setupUi(self)

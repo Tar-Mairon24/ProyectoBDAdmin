@@ -24,8 +24,8 @@ class Login(QWidget):
         self.password=self.ui.password.text()
         if self.login(self.conexion, self.user, self.password):
             self.login_successful.emit()
-            widget = Menu()
-            widget.show()
+            self.menu = Menu()
+            self.menu.show()
         else:
             self.ui.user.clear()
             self.ui.password.clear()
@@ -49,6 +49,6 @@ class Login(QWidget):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    login = Login()
+    login = Menu()
     login.show()
     sys.exit(app.exec())
