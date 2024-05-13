@@ -63,12 +63,12 @@ class Ui_Estados(object):
 
     def retranslateUi(self, Estados):
         Estados.setWindowTitle(QCoreApplication.translate("Estados", u"Estados", None))
-        self.comboBox.setPlaceholderText(QCoreApplication.translate("Estados", u"Genero", None))
+        self.comboBox.setPlaceholderText(QCoreApplication.translate("Estados", u"Estados:", None))
         self.botonGuardar.setText(QCoreApplication.translate("Estados", u"Guardar", None))
         self.botonBorrar.setText(QCoreApplication.translate("Estados", u"Borrar", None))
         self.label.setText(QCoreApplication.translate("Estados", u"Estados", None))
         self.estado_text.setText("")
-        self.estado_text.setPlaceholderText(QCoreApplication.translate("Estados", u"Genero:", None))
+        self.estado_text.setPlaceholderText(QCoreApplication.translate("Estados", u"Estado:", None))
         self.id_label.setText(QCoreApplication.translate("Estados", u"Id:", None))
         self.LimpiarCampos.setText(QCoreApplication.translate("Estados", u"Limpiar Campos", None))
     # retranslateUi
