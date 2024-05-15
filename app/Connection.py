@@ -14,7 +14,6 @@ class Connection:
                 database='My_PartidosFutbol'
             )
             self.cursor = self.conexion.cursor()
-            print('Conectado')
         except Exception as e:
             error = str(e)
             print(f'Error: {error}')
@@ -23,7 +22,6 @@ class Connection:
         if self.conexion is not None:
             self.cursor.close()
             self.conexion.close()
-            print('Desconectado')
         else:
             print('No exiten una conexión activa')
 

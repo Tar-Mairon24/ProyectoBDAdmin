@@ -23,7 +23,7 @@ class Ui_Ciudad(object):
     def setupUi(self, Ciudad):
         if not Ciudad.objectName():
             Ciudad.setObjectName(u"Ciudad")
-        Ciudad.resize(542, 431)
+        Ciudad.resize(537, 429)
         self.comboBox = QComboBox(Ciudad)
         self.comboBox.setObjectName(u"comboBox")
         self.comboBox.setGeometry(QRect(10, 50, 391, 31))
@@ -65,7 +65,7 @@ class Ui_Ciudad(object):
     # setupUi
 
     def retranslateUi(self, Ciudad):
-        Ciudad.setWindowTitle(QCoreApplication.translate("Ciudad", u"Estados", None))
+        Ciudad.setWindowTitle(QCoreApplication.translate("Ciudad", u"Ciudades", None))
         self.comboBox.setPlaceholderText(QCoreApplication.translate("Ciudad", u"Ciudades:", None))
         self.botonGuardar.setText(QCoreApplication.translate("Ciudad", u"Guardar", None))
         self.botonBorrar.setText(QCoreApplication.translate("Ciudad", u"Borrar", None))

@@ -13,13 +13,14 @@ class Estados(QWidget):
         except Exception as e:
             print(f'error: {e}')
         self.ui.botonGuardar.clicked.connect(self.guardar)
-        self.generarTabla(self.conexion)
-        self.cargarComboBox(self.conexion)
         self.cargarEstados(self.conexion)
         self.ui.botonBorrar.clicked.connect(self.borrar)
         self.ui.comboBox.currentIndexChanged.connect(self.seleccionarComboBox)
         self.ui.tableWidget.cellClicked.connect(self.seleccionarFila)
         self.ui.LimpiarCampos.clicked.connect(self.actualizarCampos)
+        self.ui.combo_estados.currentIndexChanged.connect(self.generarTabla)
+        self.ui.combo_estados.currentIndexChanged.connect(self.cargarComboBox)
+        self.ui.combo_estados.currentIndexChanged.connect(self.actualizarCampos)
     
     def guardar(self):
         ciudad = self.ui.ciudad_text.text()
@@ -80,7 +81,6 @@ class Estados(QWidget):
             conexion.rollback()
     
     def update(self, conexion, ciudad, id, estado):
-        print(estado)
         try:
             conexion.connect()
             if(estado == ' '):
@@ -128,12 +128,8 @@ class Estados(QWidget):
                 self.ui.ciudad_text.clear()
                 self.ui.id_label.setText('Id:')
             else:
-                id_ciudad, ciudad_nombre, ciudad_estado = self.ui.comboBox.currentText().split(', ')
-                # Find the index of the text in the comboBox
-                index = self.ui.combo_estados.findText(ciudad_estado)
-                # If the text is found, select it
-                if index >= 0:
-                    self.ui.combo_estados.setCurrentIndex(index)
+                id_ciudad, ciudad_nombre = self.ui.comboBox.currentText().split(', ')
+               
                 self.ui.ciudad_text.setText(ciudad_nombre)
                 self.ui.id_label.setText(id_ciudad)
                 
@@ -163,7 +159,6 @@ class Estados(QWidget):
             # Clear the combobox
             self.ui.combo_estados.clear()
             # Populate the combobox with the data
-            self.ui.combo_estados.addItem('Seleccionar')
             for row in result:
                 nombre = row[0]
                 self.ui.combo_estados.addItem(f'{nombre}')
@@ -175,24 +170,17 @@ class Estados(QWidget):
         try:
             ciudad_id = self.ui.tableWidget.item(row, 0).text()
             ciudad_nombre = self.ui.tableWidget.item(row, 1).text()
-            # Get the text in column 3
-            ciudad_estado = self.ui.tableWidget.item(row, 2).text()
-            # Find the index of the text in the comboBox
-            index = self.ui.combo_estados.findText(ciudad_estado)
-            # If the text is found, select it
-            if index >= 0:
-                self.ui.combo_estados.setCurrentIndex(index)
-
             self.ui.ciudad_text.setText(ciudad_nombre)
             self.ui.id_label.setText(ciudad_id)
         except Exception as e:
             print(f"Error: {e}")
    
-    def cargarComboBox(self, conexion):
+    def cargarComboBox(self):
         try:
             # Perform the select query using self.conexion
-            conexion.connect()
-            sql = f'SELECT id_ciudad, Ciudad.Nombre, Estados.Nombre from Ciudad, Estados where Ciudad.id_estados = Estados.id_estados'
+            estado = self.seleccionarEstado(self.conexion)
+            self.conexion.connect()
+            sql = f'select id_ciudad, Ciudad.Nombre from Ciudad where id_estados = {estado}'
             result = self.conexion.select(sql)
             # Clear the combobox
             self.ui.comboBox.clear()
@@ -201,17 +189,17 @@ class Estados(QWidget):
             for row in result:
                 nombre = row[1]
                 id = row[0]
-                estado = row[2]
-                self.ui.comboBox.addItem(f'{id}, {nombre}, {estado}')
-            conexion.disconnect()
+                self.ui.comboBox.addItem(f'{id}, {nombre}')
+            self.conexion.disconnect()
         except Exception as e:
             print(f"Error: {e}")
 
-    def generarTabla(self,conexion):
+    def generarTabla(self):
         try:
+            estado = self.seleccionarEstado(self.conexion)
             # Perform the select query using self.conexion
-            conexion.connect()
-            sql = f'SELECT id_ciudad, Ciudad.Nombre, Estados.Nombre from Ciudad, Estados where Ciudad.id_estados = Estados.id_estados'
+            self.conexion.connect()
+            sql = f'Select id_ciudad, Ciudad.Nombre from Ciudad where id_estados = {estado}'
             result = self.conexion.select(sql)
 
             # Clear the table widget
@@ -220,27 +208,24 @@ class Estados(QWidget):
             # Set the number of rows and columns in the table widget
             self.ui.tableWidget.setRowCount(len(result))
             self.ui.tableWidget.setColumnCount(len(result[0]))
-            self.ui.tableWidget.setHorizontalHeaderLabels(['ID', 'Ciudad', 'Estado'])
+            self.ui.tableWidget.setHorizontalHeaderLabels(['ID', 'Ciudad'])
             self.ui.tableWidget.setColumnWidth(0, 100)
             self.ui.tableWidget.setColumnWidth(1, 200)
-            self.ui.tableWidget.setColumnWidth(2, 200)
 
             # Populate the table widget with the data
-            for row_idx, row_data in enumerate(result):
-                for col_idx, col_data in enumerate(row_data):
-                    item = QTableWidgetItem(str(col_data))
-                    self.ui.tableWidget.setItem(row_idx, col_idx, item)
-            conexion.disconnect()
+            for row in range(len(result)):
+                for column in range(len(result[0])):
+                    self.ui.tableWidget.setItem(row, column, QTableWidgetItem(str(result[row][column])))
+            self.conexion.disconnect()
 
         except Exception as e:
             print(f'Error: {e}')
 
     def actualizarCampos(self):
-        self.generarTabla(self.conexion)
-        self.cargarComboBox(self.conexion)
-        self.cargarEstados(self.conexion)
+        self.cargarComboBox()
         self.ui.ciudad_text.clear()
         self.ui.id_label.setText('Id:')
+        self.generarTabla()
 
 if __name__ == "__main__":  
     app = QApplication(sys.argv)
