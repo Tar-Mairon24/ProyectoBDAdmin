@@ -1,36 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Ciudad</class>
- <widget class="QWidget" name="Ciudad">
+ <class>Jugador</class>
+ <widget class="QWidget" name="Jugador">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>537</width>
-    <height>429</height>
+    <width>540</width>
+    <height>581</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Ciudades</string>
+   <string>Jugadores</string>
   </property>
-  <widget class="QComboBox" name="comboBox">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>50</y>
-     <width>391</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="placeholderText">
-    <string>Ciudades:</string>
-   </property>
-  </widget>
   <widget class="QPushButton" name="botonGuardar">
    <property name="geometry">
     <rect>
      <x>300</x>
-     <y>380</y>
+     <y>530</y>
      <width>111</width>
      <height>41</height>
     </rect>
@@ -43,7 +30,7 @@
    <property name="geometry">
     <rect>
      <x>420</x>
-     <y>380</y>
+     <y>530</y>
      <width>111</width>
      <height>41</height>
     </rect>
@@ -56,7 +43,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>0</y>
+     <y>10</y>
      <width>371</width>
      <height>41</height>
     </rect>
@@ -67,15 +54,15 @@
     </font>
    </property>
    <property name="text">
-    <string>Ciudades</string>
+    <string>Jugadores</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="ciudad_text">
+  <widget class="QLineEdit" name="nombre_text">
    <property name="geometry">
     <rect>
-     <x>80</x>
+     <x>10</x>
      <y>330</y>
-     <width>201</width>
+     <width>281</width>
      <height>41</height>
     </rect>
    </property>
@@ -83,54 +70,33 @@
     <string/>
    </property>
    <property name="placeholderText">
-    <string>Ciudad:</string>
+    <string>Nombre:</string>
    </property>
   </widget>
   <widget class="QTableWidget" name="tableWidget">
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>100</y>
+     <y>90</y>
      <width>521</width>
      <height>221</height>
     </rect>
    </property>
   </widget>
-  <widget class="QLabel" name="id_label">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>330</y>
-     <width>61</width>
-     <height>41</height>
-    </rect>
-   </property>
-   <property name="autoFillBackground">
-    <bool>true</bool>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">color: rgb(255, 255, 255);
-
-</string>
-   </property>
-   <property name="text">
-    <string>Id:</string>
-   </property>
-  </widget>
   <widget class="QPushButton" name="LimpiarCampos">
    <property name="geometry">
     <rect>
-     <x>410</x>
-     <y>50</y>
-     <width>121</width>
-     <height>31</height>
+     <x>10</x>
+     <y>530</y>
+     <width>131</width>
+     <height>41</height>
     </rect>
    </property>
    <property name="text">
     <string>Limpiar Campos</string>
    </property>
   </widget>
-  <widget class="QComboBox" name="combo_estados">
+  <widget class="QComboBox" name="combo_genero">
    <property name="geometry">
     <rect>
      <x>300</x>
@@ -140,7 +106,136 @@
     </rect>
    </property>
    <property name="placeholderText">
-    <string>Estados:</string>
+    <string>Genero:</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="ApellidoPaterno_text">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>380</y>
+     <width>281</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="placeholderText">
+    <string>Apellido Paterno:</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="ApellidoMaterno_text">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>430</y>
+     <width>281</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="placeholderText">
+    <string>Apellido Materno:</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="numero_text">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>480</y>
+     <width>81</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="placeholderText">
+    <string>Numero:</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="telefono_text">
+   <property name="geometry">
+    <rect>
+     <x>100</x>
+     <y>480</y>
+     <width>191</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="placeholderText">
+    <string>Celular:</string>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="combo_equipo">
+   <property name="geometry">
+    <rect>
+     <x>300</x>
+     <y>380</y>
+     <width>231</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="placeholderText">
+    <string>Equipo:</string>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="combo_genero_3">
+   <property name="geometry">
+    <rect>
+     <x>300</x>
+     <y>430</y>
+     <width>231</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="placeholderText">
+    <string>Categoria:</string>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="combo_genero_4">
+   <property name="geometry">
+    <rect>
+     <x>300</x>
+     <y>480</y>
+     <width>231</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="placeholderText">
+    <string>Categoria:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="equipo_label">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>60</y>
+     <width>521</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>12</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(84, 84, 84);
+border-radius:3px;
+border-color: rgb(29, 29, 29);</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
    </property>
   </widget>
  </widget>
