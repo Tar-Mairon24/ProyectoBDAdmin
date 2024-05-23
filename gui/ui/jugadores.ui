@@ -186,7 +186,7 @@
     <string>Equipo:</string>
    </property>
   </widget>
-  <widget class="QComboBox" name="combo_genero_3">
+  <widget class="QComboBox" name="combo_categoria_edad">
    <property name="geometry">
     <rect>
      <x>300</x>
@@ -196,10 +196,10 @@
     </rect>
    </property>
    <property name="placeholderText">
-    <string>Categoria:</string>
+    <string>Categoria Edad:</string>
    </property>
   </widget>
-  <widget class="QComboBox" name="combo_genero_4">
+  <widget class="QComboBox" name="combo_categoria_genero">
    <property name="geometry">
     <rect>
      <x>300</x>
@@ -209,7 +209,7 @@
     </rect>
    </property>
    <property name="placeholderText">
-    <string>Categoria:</string>
+    <string>Categoria Genero:</string>
    </property>
   </widget>
   <widget class="QLabel" name="equipo_label">

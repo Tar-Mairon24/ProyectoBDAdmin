@@ -3,9 +3,9 @@ import app.Connection as Connection
 from PySide6.QtWidgets import QWidget, QApplication, QTableWidgetItem, QMessageBox
 from gui.ui_ciudad import Ui_Ciudad
 
-class Estados(QWidget):
+class Ciudades(QWidget):
     def __init__(self, parent=None):
-        super(Estados,self).__init__(parent)
+        super(Ciudades,self).__init__(parent)
         self.ui = Ui_Ciudad()
         self.ui.setupUi(self)
         try:
@@ -229,6 +229,6 @@ class Estados(QWidget):
 
 if __name__ == "__main__":  
     app = QApplication(sys.argv)
-    generos = Estados()
+    generos = Ciudades()
     generos.show()
     sys.exit(app.exec())

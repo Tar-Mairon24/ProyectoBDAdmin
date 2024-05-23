@@ -1,3 +1,4 @@
+import json
 import mysql.connector
 
 class Connection:
@@ -7,11 +8,14 @@ class Connection:
 
     def connect(self):
         try:
+            with open('credentials.json', 'r') as file:
+                credentials = json.load(file)
+
             self.conexion = mysql.connector.connect(
-                host='localhost',
-                user='admin',
-                password='kakashi24',
-                database='My_PartidosFutbol'
+                host=credentials['host'],
+                user=credentials['user'],
+                password=credentials['password'],
+                database=credentials['database']
             )
             self.cursor = self.conexion.cursor()
         except Exception as e:
@@ -51,4 +55,10 @@ class Connection:
     def rollback(self):
         self.conexion.rollback()
         print("Se relizo un rollback")
+
+    def leerCredenciales(self):
+        with open('credenciales.txt', 'r') as archivo:
+            credenciales = archivo.readlines()
+            credenciales = [x.strip() for x in credenciales]
+        return credenciales
 
