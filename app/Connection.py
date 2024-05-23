@@ -8,7 +8,7 @@ class Connection:
 
     def connect(self):
         try:
-            with open('credentials.json', 'r') as file:
+            with open('Credentials.json', 'r') as file:
                 credentials = json.load(file)
 
             self.conexion = mysql.connector.connect(
@@ -56,9 +56,4 @@ class Connection:
         self.conexion.rollback()
         print("Se relizo un rollback")
 
-    def leerCredenciales(self):
-        with open('credenciales.txt', 'r') as archivo:
-            credenciales = archivo.readlines()
-            credenciales = [x.strip() for x in credenciales]
-        return credenciales
 
