@@ -8,7 +8,7 @@ class Connection:
 
     def connect(self):
         try:
-            with open('Credentials.json', 'r') as file:
+            with open('Credenciales.json', 'r') as file:
                 credentials = json.load(file)
 
             self.conexion = mysql.connector.connect(
