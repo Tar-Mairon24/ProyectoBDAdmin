@@ -15,8 +15,7 @@ class Jugador(QWidget):
         self.ui.botonGuardar.clicked.connect(self.guardar)
         self.cargarEquipos(self.conexion)
         self.cargarGeneros(self.conexion)
-        self.cargarCategoriaEdad(self.conexion)
-        self.cargarCategoriaGenero(self.conexion)
+        self.cargarCategoria(self.conexion)
         self.ui.botonBorrar.clicked.connect(self.borrar)
         self.ui.LimpiarCampos.clicked.connect(self.limpiarCampos)
 
@@ -28,8 +27,6 @@ class Jugador(QWidget):
         celular = self.ui.telefono_text.text()
         equipo = self.seleccionarEquipo(self.conexion)
         genero = self.seleccionarGenero(self.conexion)
-        categoriaEdad = self.seleccionarCategoriaEdad(self.conexion)
-        categoriaGenero = self.seleccionarCategoriaGenero(self.conexion)
         id = self.ui.id_label.text()
         if nombre == '' or paterno == '' or materno == '' or numero == '' or celular == '':
             QMessageBox.warning(self, "Error", "No puedes dejar campos vacios")
@@ -46,13 +43,13 @@ class Jugador(QWidget):
         elif equipo == -1:
             QMessageBox.warning(self, "Error", "Selecciona un Equipo")
         elif self.ui.id_label.text() == 'Id:':
-            self.insertar(self.conexion, nombre, paterno, materno, numero, celular, equipo, genero, categoriaEdad, categoriaGenero)
+            self.insertar(self.conexion, nombre, paterno, materno, numero, celular, equipo, genero)
             self.actualizarCampos()
         else:
-            self.update(self.conexion, id, nombre, paterno, materno, numero, celular, equipo, genero, categoriaEdad, categoriaGenero)
+            self.update(self.conexion, id, nombre, paterno, materno, numero, celular, equipo, genero)
             self.actualizarCampos()
 
-    def insertar(self, conexion, nombre, paterno, materno, numero, celular, equipo, genero, categoriaEdad, categoriaGenero):
+    def insertar(self, conexion, nombre, paterno, materno, numero, celular, equipo, genero):
         try:
             conexion.connect()
             sql = f'SELECT id_jugador FROM Jugador ORDER BY id_jugador DESC LIMIT 1'
@@ -61,7 +58,7 @@ class Jugador(QWidget):
                 id = int(result[0][0]) + 1
             else:
                 id = 1
-            sql = f"INSERT INTO Jugador ALUES({id}, '{nombre}', '{paterno}', '{materno}', '{numero}', '{genero}', '{equipo}', '{categoriaEdad}', '{categoriaGenero}', '{celular}')"
+            sql = f"INSERT INTO Jugador ALUES({id}, '{nombre}', '{paterno}', '{materno}', '{numero}', '{genero}', '{equipo}', '{celular}')"
             conexion.insertar(sql)
             conexion.commit()
             
@@ -69,10 +66,10 @@ class Jugador(QWidget):
             print(f"Error: {e}") 
             conexion.rollback()
 
-    def update(self, conexion, id, nombre, paterno, materno, numero, celular, equipo, genero, categoriaEdad, categoriaGenero):
+    def update(self, conexion, id, nombre, paterno, materno, numero, celular, equipo, genero):
         try:
             conexion.connect()
-            sql = f"UPDATE Ciudad SET Nombre = '{nombre}', ApellidoPaterno = '{paterno}', ApellidoMaterno = '{materno}', Numero = '{numero}', Genero = '{genero}', Equipo = '{equipo}', CategoriaEdad = '{categoriaEdad}', CategoriaGenero = '{categoriaGenero}', Celular = '{celular}' WHERE id_jugador = {id}"
+            sql = f"UPDATE Ciudad SET Nombre = '{nombre}', ApellidoPaterno = '{paterno}', ApellidoMaterno = '{materno}', Numero = '{numero}', Genero = '{genero}', Equipo = '{equipo}', Celular = '{celular}' WHERE id_jugador = {id}"
             conexion.update(sql)
             conexion.commit()
             conexion.disconnect()
@@ -125,25 +122,11 @@ class Jugador(QWidget):
         except Exception as e:
             print(f"Error: {e}")
 
-    def seleccionarCategoriaEdad(self, conexion):
+    def seleccionarCategoria(self, conexion):
         try:
-            categoriaEdad = self.ui.combo_categoria_edad.currentText()
+            categoria = self.ui.combo_categoria.currentText()
             conexion.connect()
-            sql = f"SELECT id_categoria FROM Categoria WHERE Descripcion = '{categoriaEdad}'"
-            result = conexion.select(sql)
-            conexion.disconnect()
-            if len(result) > 0:
-                return result[0][0]
-            else:
-                return -1
-        except Exception as e:
-            print(f"Error: {e}")
-
-    def seleccionarCategoriaGenero(self, conexion):
-        try:
-            categoriaGenero = self.ui.combo_categoria_genero.currentText()
-            conexion.connect()
-            sql = f"SELECT id_categoria FROM Categoria WHERE Descripcion = '{categoriaGenero}'"
+            sql = f"SELECT id_categoria FROM Categoria WHERE Descripcion = '{categoria}'"
             result = conexion.select(sql)
             conexion.disconnect()
             if len(result) > 0:
@@ -177,29 +160,15 @@ class Jugador(QWidget):
         except Exception as e:
             print(f"Error: {e}")
 
-    def cargarCategoriaEdad(self, conexion):
+    def cargarCategoria(self, conexion):
         try:
             conexion.connect()
             sql = f"SELECT id_categoria, Descripcion FROM Categoria"
             result = conexion.select(sql)
             conexion.disconnect()
-            self.ui.combo_categoria_edad.clear()
+            self.ui.combo_categoria.clear()
             for row in result:
-                if row[0]%2 == 1:
-                    self.ui.combo_categoria_edad.addItem(row[1])
-        except Exception as e:
-            print(f"Error: {e}")
-
-    def cargarCategoriaGenero(self, conexion):
-        try:
-            conexion.connect()
-            sql = f"SELECT id_categoria, Descripcion FROM Categoria"
-            result = conexion.select(sql)
-            conexion.disconnect()
-            self.ui.combo_categoria_genero.clear()
-            for row in result:
-                if row[0]%2  == 0:
-                    self.ui.combo_categoria_genero.addItem(row[1])
+                self.ui.combo_categoria.addItem(row[1])
         except Exception as e:
             print(f"Error: {e}")
 
@@ -239,8 +208,7 @@ class Jugador(QWidget):
         self.ui.nombre_text.clear()
         self.ui.numero_text.clear()
         self.ui.telefono_text.clear()
-        self.cargarCategoriaEdad(self.conexion)
-        self.cargarCategoriaGenero(self.conexion)
+        self.cargarCategoria(self.conexion)
         self.cargarGeneros(self.conexion)
         self.cargarEquipos(self.conexion)
     

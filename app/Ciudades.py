@@ -31,7 +31,7 @@ class Ciudades(QWidget):
             QMessageBox.warning(self, "Error", "La Ciudad tiene muchos caracteres")
         elif ciudad.isnumeric():
             QMessageBox.warning(self, "Error", "La Ciudad no puede ser un numero")
-        elif not re.match("^[a-zA-Z]*$", ciudad):
+        elif not re.match("^[a-zA-Z ]*$", ciudad):
             QMessageBox.warning(self, "Error", "La Ciudad debe contener solo letras")
         elif self.existeEstado(self.conexion, ciudad, estado):
             QMessageBox.warning(self, "Error", "La Ciudad ya existe")
