@@ -154,7 +154,7 @@
     <string/>
    </property>
    <property name="placeholderText">
-    <string>Numero:</string>
+    <string>Numero: (2 digitos)</string>
    </property>
   </widget>
   <widget class="QLineEdit" name="telefono_text">
@@ -170,7 +170,7 @@
     <string/>
    </property>
    <property name="placeholderText">
-    <string>Celular:</string>
+    <string>Celular: (10 digitos)</string>
    </property>
   </widget>
   <widget class="QComboBox" name="combo_equipo">
@@ -211,6 +211,8 @@
    <property name="font">
     <font>
      <pointsize>12</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
     </font>
    </property>
    <property name="styleSheet">
@@ -223,6 +225,26 @@ border-color: rgb(29, 29, 29);</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="id_label">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>530</y>
+     <width>81</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+     <weight>50</weight>
+     <bold>false</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>Id:</string>
    </property>
   </widget>
  </widget>

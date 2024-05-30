@@ -13,11 +13,14 @@ class Jugador(QWidget):
         except Exception as e:
             print(f'error: {e}')
         self.ui.botonGuardar.clicked.connect(self.guardar)
-        self.cargarEquipos(self.conexion)
         self.cargarGeneros(self.conexion)
         self.cargarCategoria(self.conexion)
         self.ui.botonBorrar.clicked.connect(self.borrar)
         self.ui.LimpiarCampos.clicked.connect(self.limpiarCampos)
+        self.ui.combo_categoria.currentIndexChanged.connect(self.cargarEquipos)
+        self.ui.combo_equipo.currentIndexChanged.connect(self.generarTabla)
+        self.ui.combo_equipo.currentIndexChanged.connect(self.actualizarLabelEquipo)
+        self.ui.tableWidget.cellClicked.connect(self.seleccionarFila)
 
     def guardar(self):
         nombre = self.ui.nombre_text.text()
@@ -44,10 +47,10 @@ class Jugador(QWidget):
             QMessageBox.warning(self, "Error", "Selecciona un Equipo")
         elif self.ui.id_label.text() == 'Id:':
             self.insertar(self.conexion, nombre, paterno, materno, numero, celular, equipo, genero)
-            self.actualizarCampos()
+            self.limpiarCampos()
         else:
             self.update(self.conexion, id, nombre, paterno, materno, numero, celular, equipo, genero)
-            self.actualizarCampos()
+            self.limpiarCampos()
 
     def insertar(self, conexion, nombre, paterno, materno, numero, celular, equipo, genero):
         try:
@@ -58,7 +61,7 @@ class Jugador(QWidget):
                 id = int(result[0][0]) + 1
             else:
                 id = 1
-            sql = f"INSERT INTO Jugador ALUES({id}, '{nombre}', '{paterno}', '{materno}', '{numero}', '{genero}', '{equipo}', '{celular}')"
+            sql = f"INSERT INTO Jugador VALUES({id}, '{nombre}', '{paterno}', '{materno}', '{numero}', '{celular}', {genero}, {equipo})"
             conexion.insertar(sql)
             conexion.commit()
             
@@ -69,7 +72,8 @@ class Jugador(QWidget):
     def update(self, conexion, id, nombre, paterno, materno, numero, celular, equipo, genero):
         try:
             conexion.connect()
-            sql = f"UPDATE Ciudad SET Nombre = '{nombre}', ApellidoPaterno = '{paterno}', ApellidoMaterno = '{materno}', Numero = '{numero}', Genero = '{genero}', Equipo = '{equipo}', Celular = '{celular}' WHERE id_jugador = {id}"
+            id_jugador = id.split(" ")[1]
+            sql = f"UPDATE Jugador SET Nombre = '{nombre}', Paterno = '{paterno}', Materno = '{materno}', Numero = '{numero}', id_genero = '{genero}', id_equipo = '{equipo}', Celular = '{celular}' WHERE id_jugador = {id_jugador}"
             conexion.update(sql)
             conexion.commit()
             conexion.disconnect()
@@ -78,16 +82,17 @@ class Jugador(QWidget):
             conexion.rollback()
 
     def borrar(self):
-        if self.ui.nombre_text.text() == '' or self.ui.id_label.text() == 'Id:' or self.ui.ApellidoPaterno_text.text() == '' or self.ui.ApellidoMaterno_text.text() == '' or self.ui.numero_text.text() == '' or self.ui.telefono_text.text() == '' or self.ui.combo_equipo.currentText() == '' or self.ui.combo_genero.currentText() == '' or self.ui.combo_categoriaEdad.currentText() == '' or self.ui.combo_categoriaGenero.currentText() == '':
-            QMessageBox.warning(self, "Error", "No hay elemento a borrar")
+        if self.ui.nombre_text.text() == '' or self.ui.id_label.text() == 'Id:' or self.ui.ApellidoPaterno_text.text() == '' or self.ui.ApellidoMaterno_text.text() == '' or self.ui.numero_text.text() == '' or self.ui.telefono_text.text() == '' or self.ui.combo_equipo.currentText() == '' or self.ui.combo_genero.currentText() == '':
+            QMessageBox.warning(self, "Error", "Llenar todos los campos a borrar")
         else:
             self.delete(self.conexion, self.ui.id_label.text())
-            self.actualizarCampos()
+            self.limpiarCampos()
 
     def delete(self, conexion, id):
         try:
             conexion.connect()
-            sql = f"DELETE FROM Ciudad WHERE and id_ciudad = {id}"
+            id_jugador = id.split(" ")[1]
+            sql = f"DELETE FROM Jugador WHERE id_jugador = {id_jugador}"
             conexion.delete(sql)
             conexion.commit()
         except Exception as e:
@@ -97,8 +102,9 @@ class Jugador(QWidget):
     def seleccionarEquipo(self, conexion):
         try:
             equipo = self.ui.combo_equipo.currentText()
+            categoria = self.seleccionarCategoria(conexion)
             conexion.connect()
-            sql = f"SELECT id_equipo FROM Equipo WHERE Nombre = '{equipo}'"
+            sql = f"SELECT id_equipo FROM Equipo WHERE Nombre = '{equipo}' and id_categoria = '{categoria}';"
             result = conexion.select(sql)
             conexion.disconnect()
             if len(result) > 0:
@@ -136,12 +142,13 @@ class Jugador(QWidget):
         except Exception as e:
             print(f"Error: {e}")
 
-    def cargarEquipos(self, conexion):
+    def cargarEquipos(self):
+        catergoria = self.seleccionarCategoria(self.conexion)
         try:
-            conexion.connect()
-            sql = f"SELECT Nombre FROM Equipo"
-            result = conexion.select(sql)
-            conexion.disconnect()
+            self.conexion.connect()
+            sql = f"SELECT Nombre FROM Equipo where id_categoria = {catergoria}"
+            result = self.conexion.select(sql)
+            self.conexion.disconnect()
             self.ui.combo_equipo.clear()
             for row in result:
                 self.ui.combo_equipo.addItem(row[0])
@@ -177,30 +184,56 @@ class Jugador(QWidget):
             equipo = self.seleccionarEquipo(self.conexion)
             # Perform the select query using self.conexion
             self.conexion.connect()
-            sql = f'select Nombre, Paterno, Materno, Numero, Celular from Jugadores where id_equipo = {equipo};'
+            sql = f'select Nombre, Paterno, Materno, Numero, Celular from Jugador where id_equipo = {equipo};'
             result = self.conexion.select(sql)
-
-            # Clear the table widget
-            self.ui.tableWidget.clear()
-
-            # Set the number of rows and columns in the table widget
-            self.ui.tableWidget.setRowCount(len(result))
-            self.ui.tableWidget.setColumnCount(len(result[0]))
-            self.ui.tableWidget.setHorizontalHeaderLabels(['Nombre', 'Paterno', 'Materno', 'Numero', 'Celular'])
-            self.ui.tableWidget.setColumnWidth(0, 150)
-            self.ui.tableWidget.setColumnWidth(1, 150)
-            self.ui.tableWidget.setColumnWidth(2, 150)
-            self.ui.tableWidget.setColumnWidth(3, 150)
-            self.ui.tableWidget.setColumnWidth(4, 150)
-
-            # Populate the table widget with the data
-            for row in range(len(result)):
-                for column in range(len(result[0])):
-                    self.ui.tableWidget.setItem(row, column, QTableWidgetItem(str(result[row][column])))
             self.conexion.disconnect()
+            self.ui.tableWidget.setRowCount(len(result))
+            self.ui.tableWidget.setColumnCount(5)
+            self.ui.tableWidget.setHorizontalHeaderLabels(['Nombre', 'Apellido Paterno', 'Apellido Materno', 'Numero', 'Celular'])
+            self.ui.tableWidget.setColumnWidth(1, 115)
+            self.ui.tableWidget.setColumnWidth(2, 115)
+            self.ui.tableWidget.setColumnWidth(3, 70)
+            for row in range(len(result)):
+                for col in range(5):
+                    item = QTableWidgetItem(str(result[row][col]))
+                    self.ui.tableWidget.setItem(row, col, item)
         except Exception as e:
             print(f'Error: {e}')
 
+    def actualizarLabelEquipo(self):
+        try:
+            equipo = self.ui.combo_equipo.currentText()
+            categoria = self.ui.combo_categoria.currentText()
+            self.ui.equipo_label.setText(f'Equipo: {equipo} ({categoria})')
+        except Exception as e:
+            print(f'Error: {e}')
+
+    def seleccionarFila(self, row):
+        try:
+            nombre = self.ui.tableWidget.item(row, 0).text()
+            paterno = self.ui.tableWidget.item(row, 1).text()
+            materno = self.ui.tableWidget.item(row, 2).text()
+            numero = self.ui.tableWidget.item(row, 3).text()
+            celular = self.ui.tableWidget.item(row, 4).text()
+            self.ui.nombre_text.setText(nombre)
+            self.ui.ApellidoPaterno_text.setText(paterno)
+            self.ui.ApellidoMaterno_text.setText(materno)
+            self.ui.numero_text.setText(numero)
+            self.ui.telefono_text.setText(celular)
+            self.conexion.connect()
+            sql = f"SELECT id_jugador, id_genero FROM Jugador WHERE Nombre = '{nombre}' and Paterno = '{paterno}' and Materno = '{materno}' and Numero = '{numero}' and Celular = '{celular}';"
+            result = self.conexion.select(sql)
+            if len(result) > 0:
+                id_jugador = result[0][0]
+                id_genero = result[0][1]
+            self.conexion.disconnect()
+            self.ui.id_label.setText(f'Id: {id_jugador}')
+            self.ui.combo_genero.setCurrentIndex(id_genero - 1)
+            self.conexion.disconnect()
+            self.conexion.connect()
+
+        except Exception as e:
+            print(f"Error: {e}")
         
     def limpiarCampos(self):
         self.ui.ApellidoMaterno_text.clear()
@@ -208,9 +241,10 @@ class Jugador(QWidget):
         self.ui.nombre_text.clear()
         self.ui.numero_text.clear()
         self.ui.telefono_text.clear()
-        self.cargarCategoria(self.conexion)
         self.cargarGeneros(self.conexion)
-        self.cargarEquipos(self.conexion)
+        self.ui.id_label.setText("Id:")   
+        self.ui.tableWidget.clearSelection() 
+        self.generarTabla()
     
 if __name__ == "__main__":  
     app = QApplication(sys.argv)

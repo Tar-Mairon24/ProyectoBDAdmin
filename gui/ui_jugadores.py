@@ -71,11 +71,19 @@ class Ui_Jugador(object):
         self.equipo_label.setGeometry(QRect(10, 110, 521, 31))
         font1 = QFont()
         font1.setPointSize(12)
+        font1.setBold(True)
         self.equipo_label.setFont(font1)
         self.equipo_label.setStyleSheet(u"background-color: rgb(84, 84, 84);\n"
 "border-radius:3px;\n"
 "border-color: rgb(29, 29, 29);")
         self.equipo_label.setAlignment(Qt.AlignCenter)
+        self.id_label = QLabel(Jugador)
+        self.id_label.setObjectName(u"id_label")
+        self.id_label.setGeometry(QRect(10, 530, 81, 41))
+        font2 = QFont()
+        font2.setPointSize(10)
+        font2.setBold(False)
+        self.id_label.setFont(font2)
 
         self.retranslateUi(Jugador)
 
@@ -96,11 +104,12 @@ class Ui_Jugador(object):
         self.ApellidoMaterno_text.setText("")
         self.ApellidoMaterno_text.setPlaceholderText(QCoreApplication.translate("Jugador", u"Apellido Materno:", None))
         self.numero_text.setText("")
-        self.numero_text.setPlaceholderText(QCoreApplication.translate("Jugador", u"Numero:", None))
+        self.numero_text.setPlaceholderText(QCoreApplication.translate("Jugador", u"Numero: (2 digitos)", None))
         self.telefono_text.setText("")
-        self.telefono_text.setPlaceholderText(QCoreApplication.translate("Jugador", u"Celular:", None))
+        self.telefono_text.setPlaceholderText(QCoreApplication.translate("Jugador", u"Celular: (10 digitos)", None))
         self.combo_equipo.setPlaceholderText(QCoreApplication.translate("Jugador", u"Equipo:", None))
         self.combo_categoria.setPlaceholderText(QCoreApplication.translate("Jugador", u"Categoria:", None))
         self.equipo_label.setText("")
+        self.id_label.setText(QCoreApplication.translate("Jugador", u"Id:", None))
     # retranslateUi
 
